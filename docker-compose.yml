@@ -1,0 +1,56 @@
+
+services:
+  # Backend service
+  expensy_backend:
+    build:
+      context: ./expensy_backend
+      dockerfile: Dockerfile
+    ports:
+      - "8706:8706" # Map backend's port to localhost
+    environment:
+      PORT: 8706
+      DATABASE_URI: mongodb://root:example@mongo:27017
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: someredispassword
+    depends_on:
+      - mongo
+      - redis
+
+  # Frontend service
+  expensy_frontend:
+    build:
+      context: ./expensy_frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Map frontend's port to localhost
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8706
+    depends_on:
+      - expensy_backend
+
+  # MongoDB service
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017" # Expose MongoDB for development purposes
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+
+  # Redis service
+  redis:
+    image: redis:6.2
+    container_name: redis
+    command: ["redis-server", "--requirepass", "someredispassword"]
+    ports:
+      - "6379:6379" # Expose Redis for development purposes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mongo_data:
+  redis_data:
