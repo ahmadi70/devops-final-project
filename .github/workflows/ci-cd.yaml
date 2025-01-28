@@ -43,21 +43,40 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        - name: Install Docker Compose
-          uses: KengoTODA/actions-setup-docker-compose@main
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Docker Compose
+        uses: KengoTODA/actions-setup-docker-compose@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Log in to DockerHub
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKER_HUB_USERNAME }}
-            password: ${{ secrets.DOCKER_HUB_ACCESS_TOCKEN }}
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOCKEN }}
 
-        - name: Deploy to Staging Environment
-          run: |
-            docker compose -f docker-compose.yaml down
-            docker compose -f docker-compose.yaml up -d
+      - name: Deploy to Staging Environment
+        run: |
+          docker compose -f docker-compose.yaml down
+          docker compose -f docker-compose.yaml up -d
+
+  # Step 3: Deploy to production
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Approval for Production Deployment
+        id: approve
+        uses: hmarr/auto-approve-action@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to Production
+        if: github.event.pull_request.merged == true
+        run: |
+          docker compose -f docker-compose.prod.yaml down
+          docker compose -f docker-compose.prod.yaml up -d
