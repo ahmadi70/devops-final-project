@@ -32,9 +32,9 @@ jobs:
         run: docker build -t nahid70/devops-final-frontend:latest ./expensy_frontend
 
       # Push updated images to DockerHub
-    #   - name: Push Backend Docker Image
-    #     run: docker push nahid70/backend-img:latest
+      - name: Push Backend Docker Image
+        run: docker push nahid70/devops-final-backend:latest
 
-    #   - name: Push Frontend Docker Image
-    #     run: docker push nahid70/frontend-img:latest
+      - name: Push Frontend Docker Image
+        run: docker push nahid70/devops-final-frontend:latest
 
