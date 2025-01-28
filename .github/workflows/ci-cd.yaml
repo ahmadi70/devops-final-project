@@ -32,7 +32,7 @@ jobs:
 
       # Build and test frontend
       - name: Build Frontend Docker Image
-        run: docker build -t nahid70/devops-final-frontend:1.0.0 ./expensy_frontend
+        run: docker build -t nahid70/devops-final-frontend:latest ./expensy_frontend
 
     #   - name: Run Frontend Tests
     #     run: docker run --rm nahid70/frontend-img:latest npm test
