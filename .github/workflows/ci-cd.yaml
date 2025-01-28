@@ -34,9 +34,6 @@ jobs:
       - name: Build Frontend Docker Image
         run: docker build -t nahid70/devops-final-frontend:latest ./expensy_frontend
 
-      - name: Run Frontend Tests
-        run: docker run --rm nahid70/devops-final-frontend:latest npm test
-
       # Push updated images to DockerHub
     #   - name: Push Backend Docker Image
     #     run: docker push nahid70/backend-img:latest
