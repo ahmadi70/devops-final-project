@@ -72,8 +72,8 @@ jobs:
       - name: Approval for Production Deployment
         id: approve
         uses: hmarr/auto-approve-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Production
         if: github.event.pull_request.merged == true
