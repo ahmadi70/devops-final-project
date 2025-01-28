@@ -15,3 +15,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # Set up Docker
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      # Build and test backend
+      - name: Build Backend Docker Image
+        run: docker build -t nahid70/backend-img:latest ./expensy_backend
+
+      - name: Run Backend Tests
+        run: docker run --rm nahid70/backend-img:latest npm test
+
+      # Build and test frontend
+      - name: Build Frontend Docker Image
+        run: docker build -t nahid70/frontend-img:latest ./expensy_frontend
+
+      - name: Run Frontend Tests
+        run: docker run --rm nahid70/frontend-img:latest npm test
+
+      # Push updated images to DockerHub
+      - name: Push Backend Docker Image
+        run: docker push nahid70/backend-img:latest
+
+      - name: Push Frontend Docker Image
+        run: docker push nahid70/frontend-img:latest
