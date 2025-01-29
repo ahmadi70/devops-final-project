@@ -80,10 +80,11 @@ jobs:
       - name: Verify EKS Connection
         run: kubectl get nodes
 
-    #   - name: Deploy manifests to EKS
-    #     run: |
-    #         kubectl apply -f mongo-secret.yaml
-    #         kubectl apply -f mongo.yaml
-    #         kubectl apply -f redis.yaml
-    #         kubectl apply -f backend.yaml
-    #         kubectl apply -f frontend.yaml
+      - name: Deploy manifests to EKS
+        run: |
+            cd devops-final-project/kubernetes
+            kubectl apply -f mongo-secret.yaml
+            kubectl apply -f mongo.yaml
+            kubectl apply -f redis.yaml
+            kubectl apply -f backend.yaml
+            kubectl apply -f frontend.yaml
