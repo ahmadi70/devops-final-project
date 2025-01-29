@@ -70,7 +70,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
       - name: Deploy manifests to EKS
         run: |
-            kubectl apply -f mongo-secret.yml
+            kubectl apply -f mongo-secret.yaml
             kubectl apply -f mongo.yaml
             kubectl apply -f redis.yaml
             kubectl apply -f backend.yaml
