@@ -6,27 +6,30 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce  # Allows the volume to be mounted as read-write by a single node
   persistentVolumeReclaimPolicy: Retain
-  awsElasticBlockStore:
-    volumeID: vol-0454873b8aa9a564a # Replace with your actual EBS volume ID
-    fsType: ext4
+  storageClassName: standard
+  hostPath:
+    path: /mnt/data/redis  # Path on the host where redis data will be stored
+    type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redis-pvc
+  name: redis-data
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce  # Allows the volume to be mounted as read-write by a single node
   resources:
     requests:
-      storage: 20Gi
-  storageClassName: gp3
+      storage: 10Gi  # Requesting 10 GiB of storage
+  storageClassName: standard  # Specify the storage class (adjust as necessary)
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: redis
   name: redis
 spec:
   replicas: 1
@@ -39,30 +42,32 @@ spec:
         app: redis
     spec:
       containers:
-        - name: redis
-          image: redis:latest
-          ports:
-            - containerPort: 6379
-          env:
-            - name: REDIS_PASSWORD
-              value: someredispassword
-          command: ["redis-server", "--requirepass", "someredispassword"]
-          volumeMounts:
-            - name: redis-data
-              mountPath: /data
+      - image: redis:alpine
+        name: redis
+        command: ["redis-server", "--requirepass", "someredispassword"]
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis-data 
+          mountPath: /data
       volumes:
-        - name: redis-data
-          persistentVolumeClaim:
-            claimName: redis-pvc
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
+  labels:
+    app: redis
+  name: redis
 spec:
+  type: ClusterIP
+  ports:
+  - name: "redis-service"
+    port: 6379
+    targetPort: 6379
+    protocol: TCP
   selector:
     app: redis
-  ports:
-    - protocol: TCP
-      port: 6379
-      targetPort: 6379
