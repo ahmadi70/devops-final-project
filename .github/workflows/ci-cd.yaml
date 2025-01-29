@@ -69,12 +69,17 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
 
+      - name: Clone the repo
+        run: |
+            git clone https://github.com/ahmadi70/devops-final-project.git
+            cd devops-final-project/kubernetes || exit 1
+
       - name: Debug - List files in the repo
         run: ls -R
 
       - name: Verify EKS Connection
         run: kubectl get nodes
-        
+
     #   - name: Deploy manifests to EKS
     #     run: |
     #         kubectl apply -f mongo-secret.yaml
