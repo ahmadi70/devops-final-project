@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redis-pvc
+  name: redis-data
 spec:
   accessModes:
     - ReadWriteOnce
@@ -47,7 +47,7 @@ spec:
           env:
             - name: REDIS_PASSWORD
               value: someredispassword
-          command: ["redis-server", "--requirepass", "$(REDIS_PASSWORD)", "--appendonly", "yes"]
+          command: ["redis-server", "--requirepass", "someredispassword", "--appendonly", "yes"]
           volumeMounts:
             - name: redis-data
               mountPath: /data
@@ -59,7 +59,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
+  name: redis
 spec:
   selector:
     app: redis
