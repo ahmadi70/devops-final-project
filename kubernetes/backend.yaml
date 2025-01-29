@@ -25,7 +25,7 @@ spec:
             - name: REDIS_HOST
               value: redis-service  # Make sure the service name is 'redis'
             - name: REDIS_PORT
-              value: "6379"
+              value: "redis"
             - name: REDIS_PASSWORD
               value: someredispassword
 ---
