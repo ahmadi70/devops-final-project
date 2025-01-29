@@ -54,7 +54,7 @@ spec:
       volumes:
       - name: redis-data
         persistentVolumeClaim:
-          claimName: redis-pvc
+          claimName: redis-data
 ---
 apiVersion: v1
 kind: Service

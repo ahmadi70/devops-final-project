@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backend
@@ -21,13 +21,11 @@ spec:
             - name: PORT
               value: "8706"
             - name: DATABASE_URI
-              value: mongodb://root:example@mongo:27017  # Ensure it's pointing to the mongo service
+              value: "mongodb://root:example@mongodb:27017/"
             - name: REDIS_HOST
-              value: redis-service  # Make sure the service name is 'redis'
-            - name: REDIS_PORT
               value: "redis"
             - name: REDIS_PASSWORD
-              value: someredispassword
+              value: "someredispassword"
 ---
 apiVersion: v1
 kind: Service
