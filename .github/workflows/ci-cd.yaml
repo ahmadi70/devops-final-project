@@ -72,7 +72,6 @@ jobs:
       - name: Clone the repo
         run: |
             git clone https://github.com/ahmadi70/devops-final-project.git
-            cd devops-final-project/kubernetes || exit 1
 
       - name: Debug - List files in the repo
         run: ls -R
@@ -88,3 +87,6 @@ jobs:
             kubectl apply -f redis.yaml
             kubectl apply -f backend.yaml
             kubectl apply -f frontend.yaml
+
+      - name: Verify to see all nodes, pods, svcs
+        run: kubectl get all
