@@ -10,7 +10,7 @@ on:
 
 jobs:
   # Step 1: Build and test the application
-  build-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -43,15 +43,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Test with down and up docker-compose 
-      - name: Test Dockerfile images with docker-compose
+      # Verify the docker-compose 
+      - name: Verify the Dockerfile images with docker-compose
         run: |
           docker compose -f docker-compose.yaml down
           docker compose -f docker-compose.yaml up -d
 
   # Step 3: Deploy to production - it should be for EKS cluster 
   deploy-production:
-    needs: build-test
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -64,7 +64,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Updating the EKS cluster using kubeconfig
-        run: aws eks update-kubeconfig --name nahid-eks-tf49TzK9 --region ${{ secrets.AWS_REGION }} 
+        run: aws eks update-kubeconfig --name nahid-eks-new --region ${{ secrets.AWS_REGION }} 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
@@ -82,7 +82,7 @@ jobs:
       - name: Deploy manifests to EKS
         run: |
             cd devops-final-project/kubernetes
-            kubectl apply -f mongo.yaml
+            kubectl apply -f mongodb.yaml
             kubectl apply -f redis.yaml
             kubectl apply -f backend.yaml
             kubectl apply -f frontend.yaml
