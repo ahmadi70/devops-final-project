@@ -28,8 +28,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: redis
   name: redis
 spec:
   replicas: 1
@@ -42,12 +40,11 @@ spec:
         app: redis
     spec:
       containers:
-      - image: redis:alpine
-        name: redis
-        command: ["redis-server", "--requirepass", "someredispassword"]
+      - name: redis
+        image: redis:8.0-M03-alpine3.21
         ports:
         - containerPort: 6379
-          name: redis
+        command: ["redis-server", "--requirepass", "someredispassword"]
         volumeMounts:
         - name: redis-data 
           mountPath: /data
