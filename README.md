@@ -84,7 +84,7 @@ Terraform provisions:
 
 ## 4. Deploying to Kubernetes
 
-In this step to apply all the manifests, will be done automatically  through `ci-cd.yaml` o AWS EKS
+In this step to apply all the manifests, will be done automatically  through `ci-cd.yaml` on AWS EKS
 
 ```sh
 kubectl apply -f kubernetes/
