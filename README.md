@@ -90,12 +90,20 @@ In this step to apply all the manifests, will be done automatically  through `ci
 kubectl apply -f kubernetes/
 ```
 
-Key files:
+### Key Files:
 
-- **Persistent Volumes & Claims:** `mongodb-pv.yaml`, `mongodb-pvc.yaml`, `redis-pv.yaml`, `redis-pvc.yaml`
-- **Configs & Secrets:** `app-config.yaml`, `app-secrets.yaml`
-- **Microservices Deployments and Services:** `backend.yaml`, `frontend.yaml`
-- **Databases Deployments and Services:** `mongodb.yaml`, `redis.yaml`
+- **Persistent Volumes & Claims:**
+  - `mongodb.yaml` (includes: `mongodb-pv`, `mongodb-pvc`)
+  - `redis.yaml` (includes: `redis-pv`, `redis-pvc`)
+
+- **Microservices Deployments and Services:**
+  - `backend.yaml` (includes: `backend deployment`, `backend service`)
+  - `frontend.yaml` (includes: `frontend deployment`, `frontend service`)
+
+- **Databases Deployments and Services:**
+  - `mongodb.yaml` (includes: `mongodb deployment`, `mongodb service`)
+  - `redis.yaml` (includes: `redis deployment`, `redis service`)
+
 
 ---
 
